@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parents[3]
+BASE_DIR = Path(__file__).resolve().parents[4]
 APPS_DIR = BASE_DIR / "apps" / "api"
 
 load_dotenv(BASE_DIR / ".env")
@@ -91,7 +91,7 @@ TIME_ZONE = "Europe/Berlin"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "shared" / "media"
 
