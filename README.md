@@ -20,7 +20,7 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 
 - [x] Day 01 project skeleton
 - [x] Day 02 Django backend bootstrap
-- [ ] inspection data model
+- [x] Day 03 inspection data model and admin
 - [ ] FastAPI inference service
 - [ ] React dashboard
 - [ ] training pipeline
