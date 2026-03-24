@@ -23,9 +23,11 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 03 inspection data model and admin
 - [x] Day 04 FastAPI inference service skeleton
 - [x] Day 05 React dashboard skeleton
-- [ ] training pipeline
-- [ ] watcher service
-- [ ] full end-to-end integration
+- [x] Day 06 dataset format and sample data
+- [ ] Day 07 PyTorch dataset loader
+- [ ] Day 08 training pipeline skeleton
+- [ ] Day 09 first CPU detector training
+- [ ] Day 10 evaluation and artifact versioning
 
 ## Local setup
 
