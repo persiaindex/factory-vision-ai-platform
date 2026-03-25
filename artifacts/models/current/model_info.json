@@ -1,0 +1,9 @@
+{
+  "model_name": "fasterrcnn_mobilenet_v3_large_320_fpn",
+  "num_classes": 2,
+  "use_pretrained_weights": true,
+  "checkpoint_path": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\models\\current\\model.pt",
+  "source_run_dir": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\runs\\run_20260325_153953",
+  "num_epochs": 3,
+  "device": "cpu"
+}

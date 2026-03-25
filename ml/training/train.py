@@ -6,8 +6,11 @@ import torch
 
 from ml.datasets.build import build_detection_dataloader
 from ml.training.artifacts import create_run_dir, write_json
+from ml.training.checkpoints import promote_to_current, save_checkpoint
 from ml.training.config import TrainingConfig
+from ml.training.engine import train_one_epoch
 from ml.training.model_factory import build_detection_model
+from ml.training.optim import build_optimizer
 from ml.utils.seed import set_seed
 
 
@@ -28,7 +31,7 @@ def main() -> None:
         num_workers=config.num_workers,
     )
 
-    val_dataset, val_loader = build_detection_dataloader(
+    val_dataset, _ = build_detection_dataloader(
         dataset_dir=config.dataset_dir,
         split=config.val_split,
         batch_size=config.batch_size,
@@ -36,35 +39,78 @@ def main() -> None:
         num_workers=config.num_workers,
     )
 
-    model = build_detection_model(num_classes=config.num_classes)
     device = torch.device(config.device)
+
+    model = build_detection_model(
+        num_classes=config.num_classes,
+        use_pretrained_weights=config.use_pretrained_weights,
+    )
     model.to(device)
 
-    first_images, first_targets = next(iter(train_loader))
+    optimizer = build_optimizer(
+        model=model,
+        learning_rate=config.learning_rate,
+        momentum=config.momentum,
+        weight_decay=config.weight_decay,
+    )
 
-    setup_report = {
+    epoch_logs = []
+
+    for epoch in range(1, config.num_epochs + 1):
+        epoch_result = train_one_epoch(
+            model=model,
+            optimizer=optimizer,
+            data_loader=train_loader,
+            device=device,
+        )
+        epoch_result["epoch"] = epoch
+        epoch_logs.append(epoch_result)
+        print(f"Epoch {epoch}/{config.num_epochs} - average loss: {epoch_result['average_total_loss']:.4f}")
+
+    run_checkpoint_path = run_dir / "model.pt"
+    save_checkpoint(
+        path=run_checkpoint_path,
+        model=model,
+        optimizer=optimizer,
+        epoch=config.num_epochs,
+        config=config.to_dict(),
+    )
+
+    current_model_path = promote_to_current(
+        run_checkpoint_path=run_checkpoint_path,
+        current_model_dir=config.current_model_dir,
+    )
+
+    training_summary = {
         "status": "ok",
-        "run_dir": str(run_dir),
         "device": str(device),
         "model_name": config.model_name,
+        "use_pretrained_weights": config.use_pretrained_weights,
         "train_dataset_size": len(train_dataset),
         "val_dataset_size": len(val_dataset),
-        "batch_size": config.batch_size,
-        "num_workers": config.num_workers,
-        "first_batch_num_images": len(first_images),
-        "first_image_shape": list(first_images[0].shape),
-        "first_target_keys": list(first_targets[0].keys()),
-        "first_target_num_boxes": int(first_targets[0]["boxes"].shape[0]),
+        "num_epochs": config.num_epochs,
+        "epoch_logs": epoch_logs,
+        "run_checkpoint_path": str(run_checkpoint_path),
+        "current_model_path": str(current_model_path),
     }
 
-    write_json(run_dir / "training_setup_report.json", setup_report)
+    write_json(run_dir / "training_summary.json", training_summary)
+    write_json(
+        Path(config.current_model_dir) / "model_info.json",
+        {
+            "model_name": config.model_name,
+            "num_classes": config.num_classes,
+            "use_pretrained_weights": config.use_pretrained_weights,
+            "checkpoint_path": str(current_model_path),
+            "source_run_dir": str(run_dir),
+            "num_epochs": config.num_epochs,
+            "device": str(device),
+        },
+    )
 
-    print("Training pipeline setup completed successfully.")
-    print(f"Run directory: {run_dir}")
-    print(f"Train dataset size: {len(train_dataset)}")
-    print(f"Validation dataset size: {len(val_dataset)}")
-    print(f"First image shape: {tuple(first_images[0].shape)}")
-    print(f"First target keys: {list(first_targets[0].keys())}")
+    print("Training completed successfully.")
+    print(f"Run checkpoint: {run_checkpoint_path}")
+    print(f"Current model path: {current_model_path}")
 
 
 if __name__ == "__main__":
