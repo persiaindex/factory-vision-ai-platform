@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "camera_assumption": "fixed_top_or_side_view_single_setup",
+  "scale_mm_per_pixel": 0.5,
+  "size_rules": {
+    "bottle": {
+      "expected_width_mm": 55.0,
+      "expected_height_mm": 210.0,
+      "width_tolerance_mm": 10.0,
+      "height_tolerance_mm": 20.0
+    }
+  }
+}

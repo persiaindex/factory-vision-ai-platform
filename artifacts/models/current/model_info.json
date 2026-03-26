@@ -27,7 +27,7 @@
       "false_negatives": 0
     }
   ],
-  "visuals_dir": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\runs\\run_20260326_191246\\evaluation\\visuals",
+  "visuals_dir": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\runs\\run_20260326_204024\\evaluation\\visuals",
   "model_name": "fasterrcnn_mobilenet_v3_large_320_fpn",
   "num_classes": 2,
   "active_checkpoint": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\models\\current\\model.pt"

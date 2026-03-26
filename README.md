@@ -28,7 +28,8 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 08 training pipeline skeleton
 - [x] Day 09 first CPU detector training
 - [x] Day 10 evaluation and artifact versioning
-- [ ] Day 11 preprocessing and calibration logic
+- [x] Day 11 preprocessing and calibration logic
+- [ ] Day 12 real FastAPI inference
 
 ## Local setup
 
