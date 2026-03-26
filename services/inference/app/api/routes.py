@@ -1,23 +1,33 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 
-from app.core.config import MODEL_DIR, SERVICE_NAME, SERVICE_VERSION
-from app.schemas.prediction import PredictionResponseSchema
-from app.services.predictor import run_stub_prediction
+from services.inference.app.schemas.prediction import PredictionResponseSchema
 
 router = APIRouter()
 
 
 @router.get("/health")
-def health_check() -> dict:
+def health_check(request: Request) -> dict:
+    runtime = request.app.state.runtime
     return {
         "status": "ok",
-        "service": SERVICE_NAME,
-        "version": SERVICE_VERSION,
-        "model_dir": str(MODEL_DIR),
+        "service": "inference-service",
+        "model_checkpoint": str(runtime.model_checkpoint_path),
+        "calibration_version": runtime.calibration_config.get("version", "unknown"),
+        "confidence_threshold": runtime.confidence_threshold,
     }
 
 
 @router.post("/predict", response_model=PredictionResponseSchema)
-async def predict(file: UploadFile = File(...)) -> PredictionResponseSchema:
-    _ = file.filename
-    return run_stub_prediction()
+async def predict(request: Request, file: UploadFile = File(...)) -> PredictionResponseSchema:
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="Uploaded file must have a filename.")
+
+    file_bytes = await file.read()
+    if not file_bytes:
+        raise HTTPException(status_code=400, detail="Uploaded file is empty.")
+
+    runtime = request.app.state.runtime
+    try:
+        return runtime.predict_from_bytes(file_bytes)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Inference failed: {exc}") from exc

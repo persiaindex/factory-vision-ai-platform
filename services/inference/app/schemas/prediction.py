@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class DetectionSchema(BaseModel):
     object_name: str = Field(..., examples=["bottle"])
-    confidence: float = Field(..., examples=[0.97])
+    confidence: float = Field(..., examples=[0.32])
     bbox_x_min: float = Field(..., examples=[12.0])
     bbox_y_min: float = Field(..., examples=[24.0])
     bbox_x_max: float = Field(..., examples=[128.0])
@@ -16,5 +16,7 @@ class DetectionSchema(BaseModel):
 
 class PredictionResponseSchema(BaseModel):
     status: str = Field(..., examples=["ok"])
-    model_version: str = Field(..., examples=["stub-model-v1"])
+    model_version: str = Field(..., examples=["current-model"])
+    confidence_threshold: float = Field(..., examples=[0.1])
+    num_detections: int = Field(..., examples=[1])
     detections: list[DetectionSchema]

@@ -11,6 +11,14 @@ def read_image_bgr(image_path: str) -> np.ndarray:
     return image
 
 
+def decode_image_bytes_to_bgr(file_bytes: bytes) -> np.ndarray:
+    file_array = np.frombuffer(file_bytes, dtype=np.uint8)
+    image = cv2.imdecode(file_array, cv2.IMREAD_COLOR)
+    if image is None:
+        raise ValueError("Could not decode uploaded image bytes.")
+    return image
+
+
 def bgr_to_rgb(image_bgr: np.ndarray) -> np.ndarray:
     return cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
 
