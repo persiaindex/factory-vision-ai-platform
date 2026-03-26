@@ -30,7 +30,8 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 10 evaluation and artifact versioning
 - [x] Day 11 preprocessing and calibration logic
 - [x] Day 12 real FastAPI inference
-- [ ] Day 13 Django upload endpoint and service call
+- [x] Day 13 Django upload endpoint and service call
+- [ ] Day 14 watcher service
 
 ## Local setup
 

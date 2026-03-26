@@ -17,6 +17,7 @@ class InspectionJobAdmin(admin.ModelAdmin):
         "created_at",
         "processing_started_at",
         "processing_finished_at",
+        "error_message",
     )
     list_filter = ("status", "created_at")
     search_fields = ("original_filename", "error_message")
