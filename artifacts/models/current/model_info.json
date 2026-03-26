@@ -1,9 +1,34 @@
 {
+  "status": "ok",
+  "checkpoint_path": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\models\\current\\model.pt",
+  "confidence_threshold": 0.1,
+  "iou_threshold": 0.5,
+  "total_true_positives": 1,
+  "total_false_positives": 6,
+  "total_false_negatives": 1,
+  "precision": 0.14285714285714285,
+  "recall": 0.5,
+  "f1": 0.22222222222222224,
+  "per_image_results": [
+    {
+      "image_index": 0,
+      "num_predictions": 4,
+      "num_ground_truth_boxes": 1,
+      "true_positives": 0,
+      "false_positives": 4,
+      "false_negatives": 1
+    },
+    {
+      "image_index": 1,
+      "num_predictions": 3,
+      "num_ground_truth_boxes": 1,
+      "true_positives": 1,
+      "false_positives": 2,
+      "false_negatives": 0
+    }
+  ],
+  "visuals_dir": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\runs\\run_20260326_191246\\evaluation\\visuals",
   "model_name": "fasterrcnn_mobilenet_v3_large_320_fpn",
   "num_classes": 2,
-  "use_pretrained_weights": true,
-  "checkpoint_path": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\models\\current\\model.pt",
-  "source_run_dir": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\runs\\run_20260325_153953",
-  "num_epochs": 3,
-  "device": "cpu"
+  "active_checkpoint": "C:\\Users\\khedr\\Desktop\\AI_Roadmap\\Repositories\\factory-vision-ai-platform-dev\\factory-vision-ai-platform\\artifacts\\models\\current\\model.pt"
 }

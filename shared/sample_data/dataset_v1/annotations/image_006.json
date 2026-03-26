@@ -1,15 +1,15 @@
 {
-  "image_filename": "image_001.jpg",
+  "image_filename": "image_006.jpg",
   "image_width": 640,
   "image_height": 480,
   "objects": [
     {
       "class_name": "bottle",
       "bbox": {
-        "x_min": 120,
-        "y_min": 80,
-        "x_max": 300,
-        "y_max": 420
+        "x_min": 54,
+        "y_min": 246,
+        "x_max": 384,
+        "y_max": 360
       }
     }
   ]

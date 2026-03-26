@@ -27,7 +27,8 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 07 PyTorch dataset loader
 - [x] Day 08 training pipeline skeleton
 - [x] Day 09 first CPU detector training
-- [ ] Day 10 evaluation and artifact versioning
+- [x] Day 10 evaluation and artifact versioning
+- [ ] Day 11 preprocessing and calibration logic
 
 ## Local setup
 

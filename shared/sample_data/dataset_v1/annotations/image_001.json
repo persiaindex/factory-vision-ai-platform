@@ -6,10 +6,10 @@
     {
       "class_name": "bottle",
       "bbox": {
-        "x_min": 120,
-        "y_min": 80,
-        "x_max": 300,
-        "y_max": 420
+        "x_min": 65,
+        "y_min": 266,
+        "x_max": 426,
+        "y_max": 367
       }
     }
   ]
