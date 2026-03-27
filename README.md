@@ -66,6 +66,7 @@ React dashboard polling `/api/inspections/jobs/`
 - [x] Day 14 watcher service
 - [x] Day 15 end-to-end happy path
 - [x] Day 16 portfolio polish and demo readiness
+- [x] Day 17 Docker packaging and one-command startup
 
 ## Core roadmap status
 
@@ -80,3 +81,19 @@ Copy-Item .env.example .env -Force
 docker compose up -d postgres
 ```
 
+## Docker Compose startup
+
+To start the packaged stack:
+
+```powershell
+cp .env.example .env
+# adjust values if needed
+
+docker compose up --build
+```
+
+Main local URLs:
+
+- Django: `http://127.0.0.1:8000`
+- FastAPI: `http://127.0.0.1:8001/docs`
+- React: `http://localhost:3000`

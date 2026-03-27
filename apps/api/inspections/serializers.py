@@ -25,6 +25,7 @@ class DetectionResultSerializer(serializers.ModelSerializer):
 class InspectionJobSerializer(serializers.ModelSerializer):
     detections = DetectionResultSerializer(many=True, read_only=True)
     source_image_url = serializers.SerializerMethodField()
+    source_image_proxy_url = serializers.SerializerMethodField()
 
     class Meta:
         model = InspectionJob
@@ -33,6 +34,7 @@ class InspectionJobSerializer(serializers.ModelSerializer):
             "original_filename",
             "source_image",
             "source_image_url",
+            "source_image_proxy_url",
             "status",
             "error_message",
             "created_at",
@@ -43,9 +45,11 @@ class InspectionJobSerializer(serializers.ModelSerializer):
         ]
 
     def get_source_image_url(self, obj):
-        request = self.context.get("request")
         if not obj.source_image:
             return None
-        if request is None:
-            return obj.source_image.url
-        return request.build_absolute_uri(obj.source_image.url)
+        return obj.source_image.url
+
+    def get_source_image_proxy_url(self, obj):
+        if not obj.source_image:
+            return None
+        return f"/backend{obj.source_image.url}"

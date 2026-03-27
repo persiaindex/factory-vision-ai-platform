@@ -3,17 +3,89 @@ services:
     image: postgres:16
     container_name: factory_vision_postgres
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  django:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: factory_vision_django
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - inference
+    environment:
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,[::1],django
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      INFERENCE_SERVICE_URL: http://inference:8001/predict
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/')"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 15s      
+
+  inference:
+    build:
+      context: .
+      dockerfile: services/inference/Dockerfile
+    container_name: factory_vision_inference
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+
+  watcher:
+    build:
+      context: .
+      dockerfile: services/watcher/Dockerfile
+    container_name: factory_vision_watcher
+    restart: unless-stopped
+    depends_on:
+      - django
+    environment:
+      WATCHER_INPUT_DIR: ./shared/input
+      WATCHER_FAILED_DIR: ./shared/input_failed
+      WATCHER_API_URL: http://django:8000/api/inspections/upload/
+      WATCHER_POLL_SECONDS: 2
+    volumes:
+      - .:/app
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: factory_vision_web
+    restart: unless-stopped
+    depends_on:
+      django:
+        condition: service_healthy
+    environment:
+      VITE_BACKEND_PROXY_TARGET: http://django:8000  
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
 
 volumes:
   postgres_data:

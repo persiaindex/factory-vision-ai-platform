@@ -13,11 +13,16 @@ DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 INFERENCE_SERVICE_URL = os.getenv("INFERENCE_SERVICE_URL", "http://127.0.0.1:8001/predict")
 
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-    if host.strip()
-]
+# ALLOWED_HOSTS = [
+#     host.strip()
+#     for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+#     if host.strip()
+# ]
+
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1,[::1],django"
+).split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",

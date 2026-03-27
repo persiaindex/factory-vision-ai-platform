@@ -15,6 +15,8 @@ function LatestInspectionCard({ latestJob }) {
   }
 
   const detections = latestJob.detections || [];
+  const imageSrc =
+    latestJob.source_image_proxy_url || latestJob.source_image_url || null;
 
   function handleImageLoad(event) {
     setImageSize({
@@ -35,7 +37,7 @@ function LatestInspectionCard({ latestJob }) {
         </span>
       </div>
 
-      {latestJob.source_image_url ? (
+      {imageSrc ? (
         <div
           className="inspection-image-stage"
           style={{
@@ -45,7 +47,7 @@ function LatestInspectionCard({ latestJob }) {
         >
           <img
             className="latest-inspection-image"
-            src={latestJob.source_image_url}
+            src={imageSrc}
             alt={latestJob.original_filename}
             onLoad={handleImageLoad}
           />

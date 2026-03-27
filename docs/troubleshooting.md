@@ -36,3 +36,32 @@ artifacts/models/current/
 ## Watcher crashes when backend services are down
 
 Use the resilient watcher client and processor versions from Day 14 so request errors are caught and files are moved to `shared/input_failed/`.
+
+## Service cannot connect inside Docker Compose
+
+When services run in Docker Compose, use service names instead of `localhost`:
+
+- PostgreSQL host: `postgres`
+- Django from watcher: `django`
+- FastAPI from Django: `inference`
+
+`localhost` inside a container points to the container itself, not to the host machine or another container.
+
+## Service cannot connect inside Docker Compose
+
+When services run in Docker Compose, use service names instead of `localhost`:
+
+- PostgreSQL host: `postgres`
+- Django from watcher: `django`
+- FastAPI from Django: `inference`
+- Django from Vite proxy: `django`
+
+`localhost` inside a container points to the container itself, not to the host machine or another container.
+
+## Inference container fails on OpenCV import
+
+If the inference container fails with errors related to `cv2` or missing GUI libraries, use:
+
+```txt
+opencv-python-headless
+```
