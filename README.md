@@ -32,7 +32,7 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 12 real FastAPI inference
 - [x] Day 13 Django upload endpoint and service call
 - [x] Day 14 watcher service
-- [ ] Day 15 end-to-end happy path
+- [x] Day 15 end-to-end happy path
 
 ## Local setup
 

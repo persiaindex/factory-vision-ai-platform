@@ -1,0 +1,2 @@
+export const INSPECTION_FRAME_WIDTH = 800;
+export const INSPECTION_FRAME_HEIGHT = 600;

@@ -1,61 +1,90 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import DetectionsCard from "../components/DetectionsCard";
+import JobHistoryCard from "../components/JobHistoryCard";
+import LatestInspectionCard from "../components/LatestInspectionCard";
 import StatusCard from "../components/StatusCard";
-import { fetchBackendHealth } from "../services/api";
+import { fetchBackendHealth, fetchInspectionJobs } from "../services/api";
 
 function DashboardPage() {
   const [healthData, setHealthData] = useState(null);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadHealth() {
+    let intervalId;
+
+    async function loadDashboardData() {
       try {
-        setLoading(true);
+        const [health, jobsResponse] = await Promise.all([
+          fetchBackendHealth(),
+          fetchInspectionJobs(),
+        ]);
+
+        const normalizedJobs = Array.isArray(jobsResponse)
+          ? jobsResponse
+          : (jobsResponse.results || []);
+
+        setHealthData(health);
+        setJobs(normalizedJobs);
         setError("");
-        const data = await fetchBackendHealth();
-        setHealthData(data);
       } catch (err) {
-        setError(err.message || "Unknown error while loading backend status.");
+        setError(err.message || "Unknown dashboard loading error.");
       } finally {
         setLoading(false);
       }
     }
 
-    loadHealth();
+    loadDashboardData();
+    intervalId = setInterval(loadDashboardData, 2000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
+  const latestJob = useMemo(() => {
+    return jobs.length > 0 ? jobs[0] : null;
+  }, [jobs]);
+
   return (
-    <div className="dashboard-grid">
-      <StatusCard
-        title="Frontend"
-        value="Running"
-        subtitle="React dashboard is available."
-      />
+    <div className="dashboard-stack">
+      <div className="dashboard-grid">
+        <StatusCard
+          title="Frontend"
+          value="Running"
+          subtitle="React dashboard is available."
+        />
 
-      <StatusCard
-        title="Backend connection"
-        value={loading ? "Checking..." : error ? "Offline" : "Connected"}
-        subtitle={
-          loading
-            ? "Request in progress."
-            : error
-              ? error
-              : `Service: ${healthData?.service} | Status: ${healthData?.status}`
-        }
-      />
+        <StatusCard
+          title="Backend connection"
+          value={loading ? "Checking..." : error ? "Offline" : "Connected"}
+          subtitle={
+            loading
+              ? "Request in progress."
+              : error
+                ? error
+                : `Service: ${healthData?.service} | Status: ${healthData?.status}`
+          }
+        />
 
-      <StatusCard
-        title="Latest inspection"
-        value="Not connected yet"
-        subtitle="This card will show the newest job in a later day."
-      />
+        <StatusCard
+          title="Latest job status"
+          value={latestJob ? latestJob.status : "No jobs"}
+          subtitle={latestJob ? latestJob.original_filename : "Waiting for watcher input."}
+        />
 
-      <StatusCard
-        title="Inference service"
-        value="Not connected yet"
-        subtitle="FastAPI integration with the UI comes after backend orchestration."
-      />
+        <StatusCard
+          title="Latest detections"
+          value={latestJob ? latestJob.detections?.length || 0 : 0}
+          subtitle="Count returned by the current stored inspection result."
+        />
+      </div>
+
+      <div className="dashboard-panels">
+        <LatestInspectionCard latestJob={latestJob} />
+        <DetectionsCard latestJob={latestJob} />
+        <JobHistoryCard jobs={jobs.slice(0, 10)} />
+      </div>
     </div>
   );
 }
