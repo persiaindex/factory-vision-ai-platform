@@ -16,6 +16,38 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - OpenCV
 - Docker Compose
 
+## Why this project matters
+
+This project demonstrates an end-to-end AI engineering workflow:
+
+- model training with PyTorch
+- model serving with FastAPI
+- backend orchestration with Django
+- PostgreSQL persistence
+- watcher-based file ingestion
+- frontend visualization with React
+- practical computer vision post-processing with OpenCV
+
+A new image can be dropped into an input folder, processed automatically, stored as an inspection job, and then displayed in a live dashboard with image, detections, and status.
+
+## Architecture Diagram
+
+```text
+shared/input/ 
+    ↓
+watcher service
+    ↓
+Django upload endpoint
+    ↓
+InspectionJob stored in PostgreSQL
+    ↓
+FastAPI inference service
+    ↓
+DetectionResult stored in PostgreSQL
+    ↓
+React dashboard polling `/api/inspections/jobs/`
+```
+
 ## Current progress
 
 - [x] Day 01 project skeleton
@@ -33,9 +65,18 @@ Train a PyTorch detector from raw images, watch an input folder, send images to 
 - [x] Day 13 Django upload endpoint and service call
 - [x] Day 14 watcher service
 - [x] Day 15 end-to-end happy path
+- [x] Day 16 portfolio polish and demo readiness
+
+## Core roadmap status
+
+The 15-day core roadmap is complete.
+
+Optional polish work continues after Day 15 and focuses on documentation quality, UI polish, demo readiness, and portfolio presentation.
 
 ## Local setup
 
 ```powershell
 Copy-Item .env.example .env -Force
 docker compose up -d postgres
+```
+

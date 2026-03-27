@@ -448,3 +448,28 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+
+.size-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #e5e7eb;
+}
+
+.size-status-badge--ok {
+  background: #dcfce7;
+}
+
+.size-status-badge--under {
+  background: #fef3c7;
+}
+
+.size-status-badge--over {
+  background: #fee2e2;
+}

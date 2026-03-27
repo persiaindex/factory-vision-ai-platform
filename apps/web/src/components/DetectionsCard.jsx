@@ -15,7 +15,12 @@ function DetectionsCard({ latestJob }) {
               <div>
                 <strong>{detection.object_name}</strong>
                 <p>confidence: {Number(detection.confidence).toFixed(3)}</p>
-                <p>size status: {detection.size_status}</p>
+                <p>
+                  size status:
+                  <span className={`size-status-badge size-status-badge--${String(detection.size_status).toLowerCase()}`}>
+                    {detection.size_status}
+                  </span>
+                </p>
               </div>
             </li>
           ))}
