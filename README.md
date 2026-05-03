@@ -1,3 +1,6 @@
+## Project Status
+🚧 In progress
+
 # Factory Vision AI Platform
 
 Production-style industrial computer vision portfolio project.
